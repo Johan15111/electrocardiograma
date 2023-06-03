@@ -14,7 +14,7 @@ def init():
     return ln,
 
 def init2():
-    ax2.set_ylim(0, 200)  # Establece el rango de bpm según tus necesidades
+    ax2.set_ylim(0, 200)  # Set the range of bpm as per your needs
     ax2.set_title("BPM en vivo")
     ax2.set_ylabel("BPM")
     ax2.grid(True)
@@ -34,7 +34,7 @@ def calculate_bpm(ecg_data, sampling_rate):
     return bpm
 
 def update(frame):
-    global last_bpm_calculation
+    global last_bpm_calculation, current_bpm
     current_time = time.time()
 
     try:
@@ -53,6 +53,7 @@ def update(frame):
                 if bpm is not None:
                     print(bpm)
                     bpmdata.append(bpm)
+                    current_bpm = bpm
 
             last_bpm_calculation = current_time
 
@@ -67,9 +68,13 @@ def update2(frame):
     ln2.set_data(range(len(bpmdata)), bpmdata)
     return ln2,
 
+def update3(frame):
+    bpm_text.set_text(str(int(current_bpm)))  # Round the bpm to 2 decimal places and set it as the text
+    return bpm_text,
 
 if "__main__" == __name__:
     last_bpm_calculation = time.time()
+    current_bpm = 0
 
     try:
         arduino_port = "COM3"
@@ -84,8 +89,13 @@ if "__main__" == __name__:
         bpmdata = deque(maxlen=150)
         ln2, = plt.plot([], [], 'b', label="BPM")
 
+        fig3, ax3 = plt.subplots()
+        ax3.axis('off')  # Hide the axes for this figure
+        bpm_text = plt.text(0.5, 0.5, '', fontsize=30, ha='center')  # Text to display the current bpm
+
         ani = FuncAnimation(fig, update, frames=range(0, 100000), init_func=init, blit=True, interval=0)
         ani2 = FuncAnimation(fig2, update2, frames=range(0, 100000), init_func=init2, blit=True, interval=0)
+        ani3 = FuncAnimation(fig3, update3, frames=range(0, 100000), blit=True, interval=0)
 
         plt.show()
 
