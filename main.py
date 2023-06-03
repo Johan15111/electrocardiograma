@@ -69,8 +69,20 @@ def update2(frame):
     return ln2,
 
 def update3(frame):
-    bpm_text.set_text(str(int(current_bpm)))  # Round the bpm to 2 decimal places and set it as the text
+    bpm_text.set_text("BPM: " + str(int(current_bpm)))  # Round the bpm to 2 decimal places and set it as the text
+
+    # Cambiar el color del texto dependiendo del valor del BPM
+    if current_bpm >= 0 and current_bpm <= 80:
+        bpm_text.set_color('#44B4FE')
+    elif current_bpm > 80 and current_bpm <= 100:
+        bpm_text.set_color('#35d16e')
+    elif current_bpm > 100 and current_bpm <= 110:
+        bpm_text.set_color('#ffbb00')
+    elif current_bpm > 110:
+        bpm_text.set_color('#e95569')
+
     return bpm_text,
+
 
 if "__main__" == __name__:
     last_bpm_calculation = time.time()
@@ -82,14 +94,17 @@ if "__main__" == __name__:
         ser = serial.Serial(arduino_port, baud_rate)
 
         fig, ax = plt.subplots()
+        fig.canvas.manager.window.wm_geometry("+0+340")
         ydata = deque(maxlen=150)
         ln, = plt.plot([], [], 'r', label="Valor analógico")
 
         fig2, ax2 = plt.subplots()
+        fig2.canvas.manager.window.wm_geometry("+820+340")
         bpmdata = deque(maxlen=150)
         ln2, = plt.plot([], [], 'b', label="BPM")
 
-        fig3, ax3 = plt.subplots()
+        fig3, ax3 = plt.subplots(figsize=(1, 2))
+        fig3.canvas.manager.window.wm_geometry("+0+0")
         ax3.axis('off')  # Hide the axes for this figure
         bpm_text = plt.text(0.5, 0.5, '', fontsize=30, ha='center')  # Text to display the current bpm
 
