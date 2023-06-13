@@ -5,9 +5,9 @@ const int PIN_LO_PLUS = 11;
 const int PIN_LO_MINUS = 10;
 
 const float SAMPLE_RATE = 66.67; // Frecuencia de muestreo en Hz
-const float LOW_FREQ_CUTOFF = 0.5; // Frecuencia de corte inferior en Hz
-const float HIGH_FREQ_CUTOFF = 25.0; // Frecuencia de corte superior en Hz
-const float SCALE_FACTOR = 1.5; // Factor de escala para reducir la amplitud de la señal
+const float LOW_FREQ_CUTOFF = 0.2; // Frecuencia de corte inferior en Hz
+const float HIGH_FREQ_CUTOFF = 40.0; // Frecuencia de corte superior en Hz
+const float SCALE_FACTOR = 1.0; // Factor de escala para reducir la amplitud de la señal
 
 FilterOnePole lowPassFilter(LOWPASS, HIGH_FREQ_CUTOFF, 1 / SAMPLE_RATE);
 FilterOnePole highPassFilter(HIGHPASS, LOW_FREQ_CUTOFF, 1 / SAMPLE_RATE);
